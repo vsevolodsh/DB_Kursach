@@ -36,8 +36,10 @@
             this.информацияОВсехТоварахToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.подробнаяИнформацияОТоварахВКонкретнойКатегорииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.добавитьНовогоАрендатораToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.labelCount = new System.Windows.Forms.Label();
             this.buttonSearch = new System.Windows.Forms.Button();
             this.textBoxSearch = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
@@ -106,9 +108,18 @@
             // 
             // toolStripMenuItem2
             // 
+            this.toolStripMenuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.добавитьНовогоАрендатораToolStripMenuItem});
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
             this.toolStripMenuItem2.Size = new System.Drawing.Size(71, 20);
             this.toolStripMenuItem2.Text = "Добавить";
+            // 
+            // добавитьНовогоАрендатораToolStripMenuItem
+            // 
+            this.добавитьНовогоАрендатораToolStripMenuItem.Name = "добавитьНовогоАрендатораToolStripMenuItem";
+            this.добавитьНовогоАрендатораToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.добавитьНовогоАрендатораToolStripMenuItem.Text = "Добавить нового арендатора";
+            this.добавитьНовогоАрендатораToolStripMenuItem.Click += new System.EventHandler(this.добавитьНовогоАрендатораToolStripMenuItem_Click_1);
             // 
             // dataGridView1
             // 
@@ -126,6 +137,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.labelCount);
             this.panel1.Controls.Add(this.buttonSearch);
             this.panel1.Controls.Add(this.textBoxSearch);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -133,6 +145,14 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(899, 45);
             this.panel1.TabIndex = 2;
+            // 
+            // labelCount
+            // 
+            this.labelCount.AutoSize = true;
+            this.labelCount.Location = new System.Drawing.Point(12, 14);
+            this.labelCount.Name = "labelCount";
+            this.labelCount.Size = new System.Drawing.Size(0, 15);
+            this.labelCount.TabIndex = 2;
             // 
             // buttonSearch
             // 
@@ -187,5 +207,7 @@
         private ToolStripMenuItem информацияОТоварахToolStripMenuItem;
         private ToolStripMenuItem информацияОВсехТоварахToolStripMenuItem;
         private ToolStripMenuItem подробнаяИнформацияОТоварахВКонкретнойКатегорииToolStripMenuItem;
+        private Label labelCount;
+        private ToolStripMenuItem добавитьНовогоАрендатораToolStripMenuItem;
     }
 }

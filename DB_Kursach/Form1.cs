@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace DB_Kursach
 {
@@ -41,7 +42,7 @@ namespace DB_Kursach
 
         private void подробнаяИнформацияОТоварахВКонкретнойКатегорииToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CategoryForm ctgForm = new CategoryForm();
+            CategoryForm ctgForm = new();
             DialogResult result = ctgForm.ShowDialog(this);
             bool onlyProductsInWarehouse;
             if (result == DialogResult.OK)
@@ -81,6 +82,54 @@ namespace DB_Kursach
             FillDataAdapter(dataAdapter, dataGridView1);
 
         }
+        private void добавитьНовогоАрендатораToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            string fio = "";
+            byte age = 1;
+            string telNumber = "";
+            string gender = "";
+            NewTenantForm ntForm = new();
+            DialogResult result = ntForm.ShowDialog(this);
+            if (result == DialogResult.OK)
+            {
+                fio = ntForm.fio;
+                age = ntForm.age;
+                telNumber = ntForm.telNumber;
+                gender = ntForm.gender;
+            }
+            if (result == DialogResult.Cancel)
+                return;
+            string sqlExpression = "sp_InsertTenant";
+            dataBase.openConnection();
+            SqlCommand command = new(sqlExpression, dataBase.getSqlConnection());
+            command.CommandType = CommandType.StoredProcedure;
+            SqlParameter fioParam = new SqlParameter
+            {
+                ParameterName = "@FIO",
+                Value = fio
+            };
+            SqlParameter ageParam = new SqlParameter
+            {
+                ParameterName = "@Age",
+                Value = age
+            };
+            SqlParameter telNumberParam = new SqlParameter
+            {
+                ParameterName = "@Phone",
+                Value = telNumber
+            };
+            SqlParameter genderParam = new SqlParameter
+            {
+                ParameterName = "@Gender",
+                Value = gender
+            };
+            command.Parameters.Add(fioParam);
+            command.Parameters.Add(ageParam);
+            command.Parameters.Add(telNumberParam);
+            command.Parameters.Add(genderParam);
+            var queryResult = command.ExecuteNonQuery();
+            dataBase.closeConnection();
+        }
 
         private void FillDataAdapter(SqlDataAdapter dataAdapter, DataGridView dgw)
         {
@@ -89,11 +138,12 @@ namespace DB_Kursach
             DataSet dataSet = new DataSet();
             dataAdapter.Fill(dataSet);
             dgw.DataSource = dataSet.Tables[0];
+            labelCount.Text = $"Количество записей в таблице: {dgw.Rows.Count}";
             dataBase.closeConnection();
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e) => dataBase.closeConnection();
 
-       
+        
     }
 }
