@@ -1,8 +1,10 @@
 ﻿using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace DB_Kursach
 {
@@ -78,7 +80,19 @@ namespace DB_Kursach
                     break;
                 case "ProductsSkiPoles":
                     sqlQuery = "SELECT * FROM ProductsSkiPoles WHERE CONCAT (Number, ProductGroup, Name, HandleMaterial, ShaftMaterial," +
-                        "SkiPolesLength, RentCostInHour) LIKE '%" + textBoxSearch.Text + "%'";
+                        "SkiPolesLength) LIKE '%" + textBoxSearch.Text + "%'";
+                    break;
+                case "ProductsSkis":
+                    sqlQuery = "SELECT * FROM ProductsSkis WHERE CONCAT (Number, ProductGroup, Name, RidingStyle, SkiLength) " +
+                        "LIKE '%" + textBoxSearch.Text + "%'";
+                    break;
+                case "ProductsSleigh":
+                    sqlQuery = "SELECT * FROM ProductsSleigh WHERE CONCAT (Number, ProductGroup, Name, Construction, RunnersType, MaxLoad) " +
+                        "LIKE '%" + textBoxSearch.Text + "%'";
+                    break;
+                case "ProductsSkates":
+                    sqlQuery = "SELECT * FROM ProductsSkates WHERE CONCAT (Number, ProductGroup, Name, BladeSteel, Fixation, Size) " +
+                        "LIKE '%" + textBoxSearch.Text + "%'";
                     break;
                 default:
                     break;
@@ -163,6 +177,98 @@ namespace DB_Kursach
         {
             commandBuilder = new SqlCommandBuilder(dataAdapter);
             dataAdapter.Update(dataSet);
+        }
+
+        private void забронированныеТоварыToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            currentTableName = "BookedProducts";
+            dataAdapter = new SqlDataAdapter("SELECT * FROM BookedProducts", dataBase.getSqlConnection());
+            FillDataAdapter(dataGridView1);
+        }
+
+        private void товарыВРемонтеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            currentTableName = "ProductsUnderRepair";
+            dataAdapter = new SqlDataAdapter("SELECT * FROM ProductsUnderRepair", dataBase.getSqlConnection());
+            FillDataAdapter(dataGridView1);
+        }
+
+        private void добавитьНовыйТоварToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string sqlExpression;
+            NewProductForm npForm = new();
+            DialogResult result = npForm.ShowDialog(this);
+            if (result == DialogResult.OK)
+            {
+                dataBase.openConnection();
+                SqlCommand command;
+                SqlParameter numberParam = new("@Number", npForm.Number);
+                SqlParameter subCategoryCodeParam = new("@ProductSubCategoryCode", npForm.ProductSubCategoryCode);
+                SqlParameter codeParam = new("@Code", npForm.Code);
+                SqlParameter nameParam = new("@Name", npForm.Name);
+                SqlParameter rentCostInhourParam = new("@RentCostInHour", npForm.RentCostInHour);
+                switch (npForm.selectedCategory)
+                {
+                    case "ProductsSkiPoles":
+                        sqlExpression = "sp_insertSkiPoles";
+                        command = new(sqlExpression, dataBase.getSqlConnection());
+                        SqlParameter shaftMaterialParam = new("@ShaftMaterial", npForm.ShaftMaterial);
+                        SqlParameter handleMaterialParam = new("@HandleMaterial", npForm.HandleMaterial);
+                        SqlParameter skiPolesLengthParam = new("@SkiPolesLength", npForm.SkiPolesLength);
+                        command.Parameters.Add(shaftMaterialParam);
+                        command.Parameters.Add(handleMaterialParam);
+                        command.Parameters.Add(skiPolesLengthParam);
+                        break;
+                    case "ProductsSkis":
+                        sqlExpression = "sp_insertSki";
+                        command = new(sqlExpression, dataBase.getSqlConnection());
+                        SqlParameter ridingStyleParam = new("@RidingStyle", npForm.RidingStyle);
+                        SqlParameter skiLengthParam = new("@SkiLength", npForm.SkiLength);
+                        command.Parameters.Add(ridingStyleParam);
+                        command.Parameters.Add(skiLengthParam);
+                        break;
+                    case "ProductsSleigh":
+                        sqlExpression = "sp_insertSleigh";
+                        command = new(sqlExpression, dataBase.getSqlConnection());
+                        SqlParameter bladeSteelParam = new("@BladeSteel", npForm.BladeSteel);
+                        SqlParameter fixationParam = new("@Fixation", npForm.Fixation);
+                        SqlParameter sizeParam = new("@Size", npForm.Size);
+                        command.Parameters.Add(bladeSteelParam);
+                        command.Parameters.Add(fixationParam);
+                        command.Parameters.Add(sizeParam);
+                        break;
+                    case "ProductsSkates":
+                        sqlExpression = "sp_insertSkates";
+                        command = new(sqlExpression, dataBase.getSqlConnection());
+                        SqlParameter constructionParam = new("@Construction", npForm.Construction);
+                        SqlParameter runnersTypeParam = new("@RunnersType", npForm.RunnersType);
+                        SqlParameter maxLoadParam = new("@MaxLoad", npForm.MaxLoad);
+                        command.Parameters.Add(constructionParam);
+                        command.Parameters.Add(runnersTypeParam);
+                        command.Parameters.Add(maxLoadParam);
+                        break;
+                    default:
+                        dataBase.closeConnection();
+                        return;
+                }
+                command.Parameters.Add(numberParam);
+                command.Parameters.Add(subCategoryCodeParam);
+                command.Parameters.Add(codeParam);
+                command.Parameters.Add(nameParam);
+                command.Parameters.Add(rentCostInhourParam);
+                command.CommandType = CommandType.StoredProcedure;
+                var queryResult = command.ExecuteNonQuery();
+                dataBase.closeConnection();
+            }
+            if (result == DialogResult.Cancel)
+                return;
+        }
+
+        private void buttonRefresh_Click(object sender, EventArgs e)
+        {
+            string sqlQuery = $"SELECT * FROM {currentTableName}";
+            dataAdapter = new SqlDataAdapter(sqlQuery, dataBase.getSqlConnection());
+            FillDataAdapter(dataGridView1);
         }
     }
 }

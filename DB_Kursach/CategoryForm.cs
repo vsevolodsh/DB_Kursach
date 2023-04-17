@@ -26,6 +26,15 @@ namespace DB_Kursach
                 case "Лыжные палки":
                     selectedCategory = "ProductsSkiPoles";
                     break;
+                case "Лыжи":
+                    selectedCategory = "ProductsSkis";
+                    break;
+                case "Сани":
+                    selectedCategory = "ProductsSleigh";
+                    break;
+                case "Коньки":
+                    selectedCategory = "ProductsSkates";
+                    break;
                 default:
                     MessageBox.Show("Необходимо выбрать одну из категорий!");
                     return;
