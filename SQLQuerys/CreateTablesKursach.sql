@@ -104,13 +104,13 @@ VALUES
 (369311401, 11, 4, 'TechTeam Kayot', 130, 1),
 (369311402, 11, 4, 'ATEMI AKSK02D', 140, 1),
 (369311501, 11, 5, 'Virtey', 160, 1),
-(369311502, 11, 5, 'Virtey', 160, 0),
+(369311502, 11, 5, 'Virtey', 160, 0), --  забронирован 9 
 (369311503, 11, 5, 'NORDWAY', 160, 0), -- Аня
 (369313101, 13, 1, 'Морозко', 300, 1),
 (369313102, 13, 1, 'Морозко', 300, 0),
 (369313201, 13, 2, 'Беларусь', 180, 1),
 (369313202, 13, 2, 'Беларусь', 180, 1),
-(369313203, 13, 2, 'Тимка 5 Универсал', 160, 0),
+(369313203, 13, 2, 'Тимка 5 Универсал', 160, 0), -- заброинрован 9
 (369313204, 13, 2, 'Тимка 5 Универсал', 160, 1),
 (369313205, 13, 2, 'Тимка 5 Универсал', 160, 1),
 (369313206, 13, 2, 'Ветерок 6', 160, 1),
@@ -175,12 +175,21 @@ TenantId INT FOREIGN KEY REFERENCES Tenant (Id),
 DateEnd DATETIME NOT NULL,
 )
 
+INSERT INTO Booking (TenantId, DateEnd)
+VALUES
+(9, '17.04.2023')
+
 CREATE TABLE ProductBooking
 (
 BookingId INT FOREIGN KEY REFERENCES Booking (Id),
 ProductNumber INT FOREIGN KEY REFERENCES Product (Number),
 PRIMARY KEY(BookingId, ProductNumber)
 )
+
+INSERT INTO ProductBooking(BookingId, ProductNumber)
+VALUES
+(1, 369311502),
+(1, 369313203)
 
 CREATE TABLE Rent
 (
@@ -225,7 +234,7 @@ CREATE TABLE DecommissionedProduct
 Id INT PRIMARY KEY IDENTITY,
 ProductNumber INT FOREIGN KEY REFERENCES Product (Number),
 DecommissionedDate DATETIME NOT NULL,
-DecommissionedProductCount INT NOT NULL
+Reason nvarchar(250) NOT NULL
 )
 
 CREATE TABLE RepairCompany
@@ -251,17 +260,18 @@ CREATE TABLE RepairProduct
 RepairCompanyId INT FOREIGN KEY REFERENCES RepairCompany (Id),
 ProductNumber INT FOREIGN KEY REFERENCES Product (Number),
 Cost MONEY NOT NULL,
+StartDate DATE NOT NULL,
+EndDate DATE NOT NULL
 PRIMARY KEY(RepairCompanyId, ProductNumber)
 )
 
-INSERT INTO RepairProduct (RepairCompanyId, ProductNumber, Cost)
+INSERT INTO RepairProduct (RepairCompanyId, ProductNumber, Cost, StartDate, EndDate)
 VALUES 
-(1, 369310101, 400)
+(1, 369310101, 400, '13.04.2023', '24.04.2023')
 
 CREATE TABLE SkiPoles
 (
-Id INT PRIMARY KEY IDENTITY,
-ProductNumber INT FOREIGN KEY REFERENCES Product (Number),
+ProductNumber INT FOREIGN KEY REFERENCES Product (Number) PRIMARY KEY,
 ShaftMaterial nvarchar(50) NOT NULL,
 HandleMaterial nvarchar(50) NOT NULL,
 SkiPolesLength TINYINT NOT NULL  
@@ -288,8 +298,7 @@ VALUES
 
 CREATE TABLE Skates
 (
-Id INT PRIMARY KEY IDENTITY,
-ProductNumber INT FOREIGN KEY REFERENCES Product (Number),
+ProductNumber INT FOREIGN KEY REFERENCES Product (Number) PRIMARY KEY,
 BladeSteel nvarchar(50) NOT NULL,
 Fixation nvarchar(50) NOT NULL,
 Size TINYINT NOT NULL
@@ -314,8 +323,7 @@ VALUES
 
 CREATE TABLE Sleigh
 (
-Id INT PRIMARY KEY IDENTITY,
-ProductNumber INT FOREIGN KEY REFERENCES Product (Number),
+ProductNumber INT FOREIGN KEY REFERENCES Product (Number) PRIMARY KEY,
 Construction nvarchar(50) NOT NULL,
 RunnersType nvarchar(50) NOT NULL,
 MaxLoad TINYINT NOT NULL  
@@ -337,8 +345,7 @@ VALUES
 
 CREATE TABLE Ski
 (
-Id INT PRIMARY KEY IDENTITY,
-ProductNumber INT FOREIGN KEY REFERENCES Product (Number),
+ProductNumber INT FOREIGN KEY REFERENCES Product (Number) PRIMARY KEY,
 RidingStyle nvarchar(50) NOT NULL,
 SkiLength INT NOT NULL  
 )
