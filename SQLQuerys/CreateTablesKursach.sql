@@ -173,16 +173,18 @@ CREATE TABLE Booking
 Id INT PRIMARY KEY IDENTITY,
 TenantId INT FOREIGN KEY REFERENCES Tenant (Id),
 DateEnd DATETIME NOT NULL,
+IsOver BIT
 )
 
-INSERT INTO Booking (TenantId, DateEnd)
+INSERT INTO Booking (TenantId, DateEnd, IsOver)
 VALUES
-(9, '17.04.2023')
+(9, '17.04.2023', 0)
 
 CREATE TABLE ProductBooking
 (
 BookingId INT FOREIGN KEY REFERENCES Booking (Id),
 ProductNumber INT FOREIGN KEY REFERENCES Product (Number),
+IsOver BIT
 PRIMARY KEY(BookingId, ProductNumber)
 )
 
@@ -198,15 +200,16 @@ TenantId INT FOREIGN KEY REFERENCES Tenant (Id),
 TotalRentCost MONEY NOT NULL,
 DateStart DATETIME NOT NULL,
 DateEnd DATETIME NOT NULL,
-TotalDepositCost MONEY NOT NULL
+TotalDepositCost MONEY NOT NULL,
+IsOver BIT
 )
 
-INSERT INTO Rent(TenantId, TotalRentCost, DateStart, DateEnd, TotalDepositCost)
+INSERT INTO Rent(TenantId, TotalRentCost, DateStart, DateEnd, TotalDepositCost, IsOver)
 VALUES
-(1, 3225, '04.04.2023 12:00', '04.04.2023 15:00', 3500),
-(2, 3675, '05.04.2023 10:00', '05.04.2023 17:00', 4000),
-(3, 1680, '05.04.2023 12:45', '05.04.2023 15:45', 2000),
-(6, 680, '07.04.2023 11:30', '05.04.2023 13:30', 1000)
+(1, 3225, '04.04.2023 12:00', '04.04.2023 15:00', 3500, 1),
+(2, 3675, '05.04.2023 10:00', '05.04.2023 17:00', 4000, 1),
+(3, 1680, '05.04.2023 12:45', '05.04.2023 15:45', 2000, 1),
+(6, 680, '01.05.2023 11:30', '01.05.2023 13:30', 1000, 0)
 
 CREATE TABLE ProductRent
 (
@@ -261,17 +264,18 @@ RepairCompanyId INT FOREIGN KEY REFERENCES RepairCompany (Id),
 ProductNumber INT FOREIGN KEY REFERENCES Product (Number),
 Cost MONEY NOT NULL,
 StartDate DATE NOT NULL,
-EndDate DATE NOT NULL
+EndDate DATE NOT NULL, 
+IsOver BIT
 PRIMARY KEY(RepairCompanyId, ProductNumber)
 )
 
-INSERT INTO RepairProduct (RepairCompanyId, ProductNumber, Cost, StartDate, EndDate)
+INSERT INTO RepairProduct (RepairCompanyId, ProductNumber, Cost, StartDate, EndDate, IsOver)
 VALUES 
-(1, 369310101, 400, '13.04.2023', '24.04.2023')
+(1, 369310101, 400, '13.04.2023', '24.04.2023', 1)
 
 CREATE TABLE SkiPoles
 (
-ProductNumber INT FOREIGN KEY REFERENCES Product (Number) PRIMARY KEY,
+ProductNumber INT FOREIGN KEY REFERENCES  Product (Number) ON DELETE CASCADE PRIMARY KEY,
 ShaftMaterial nvarchar(50) NOT NULL,
 HandleMaterial nvarchar(50) NOT NULL,
 SkiPolesLength TINYINT NOT NULL  
@@ -298,7 +302,7 @@ VALUES
 
 CREATE TABLE Skates
 (
-ProductNumber INT FOREIGN KEY REFERENCES Product (Number) PRIMARY KEY,
+ProductNumber INT FOREIGN KEY REFERENCES Product (Number) ON DELETE CASCADE PRIMARY KEY,
 BladeSteel nvarchar(50) NOT NULL,
 Fixation nvarchar(50) NOT NULL,
 Size TINYINT NOT NULL
@@ -323,7 +327,7 @@ VALUES
 
 CREATE TABLE Sleigh
 (
-ProductNumber INT FOREIGN KEY REFERENCES Product (Number) PRIMARY KEY,
+ProductNumber INT FOREIGN KEY REFERENCES Product (Number) ON DELETE CASCADE PRIMARY KEY,
 Construction nvarchar(50) NOT NULL,
 RunnersType nvarchar(50) NOT NULL,
 MaxLoad TINYINT NOT NULL  
@@ -345,7 +349,7 @@ VALUES
 
 CREATE TABLE Ski
 (
-ProductNumber INT FOREIGN KEY REFERENCES Product (Number) PRIMARY KEY,
+ProductNumber INT FOREIGN KEY REFERENCES Product (Number) ON DELETE CASCADE PRIMARY KEY,
 RidingStyle nvarchar(50) NOT NULL,
 SkiLength INT NOT NULL  
 )
