@@ -1,10 +1,5 @@
 ﻿using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
-using System.Security.Cryptography;
-using System.Windows.Forms;
-using System.Xml.Linq;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace DB_Kursach
 {
@@ -81,18 +76,22 @@ namespace DB_Kursach
                 case "ProductsSkiPoles":
                     sqlQuery = "SELECT * FROM ProductsSkiPoles WHERE CONCAT (Number, ProductGroup, Name, HandleMaterial, ShaftMaterial," +
                         "SkiPolesLength) LIKE '%" + textBoxSearch.Text + "%'";
+                    buttonDelete.Enabled = false;
                     break;
                 case "ProductsSkis":
                     sqlQuery = "SELECT * FROM ProductsSkis WHERE CONCAT (Number, ProductGroup, Name, RidingStyle, SkiLength) " +
                         "LIKE '%" + textBoxSearch.Text + "%'";
+                    buttonDelete.Enabled = false;
                     break;
                 case "ProductsSleigh":
                     sqlQuery = "SELECT * FROM ProductsSleigh WHERE CONCAT (Number, ProductGroup, Name, Construction, RunnersType, MaxLoad) " +
                         "LIKE '%" + textBoxSearch.Text + "%'";
+                    buttonDelete.Enabled = false;
                     break;
                 case "ProductsSkates":
                     sqlQuery = "SELECT * FROM ProductsSkates WHERE CONCAT (Number, ProductGroup, Name, BladeSteel, Fixation, Size) " +
                         "LIKE '%" + textBoxSearch.Text + "%'";
+                    buttonDelete.Enabled = false;
                     break;
                 default:
                     break;
@@ -147,16 +146,22 @@ namespace DB_Kursach
             command.Parameters.Add(telNumberParam);
             command.Parameters.Add(genderParam);
             var queryResult = command.ExecuteNonQuery();
+            //dataAdapter.DeleteCommand = new SqlCommand();
             dataBase.closeConnection();
         }
 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
             // удаляем выделенные строки из dataGridView1
+            dataBase.openConnection();
             foreach (DataGridViewRow row in dataGridView1.SelectedRows)
             {
+                dataAdapter.DeleteCommand = new SqlCommand("DELETE FROM Product WHERE Number = @Number", dataBase.getSqlConnection());
+                dataAdapter.DeleteCommand.Parameters.Add("@Number", SqlDbType.Int).Value = dataSet.Tables[0].Rows[row.Index][0];
+                dataAdapter.DeleteCommand.ExecuteNonQuery();
                 dataGridView1.Rows.Remove(row);
             }
+            dataBase.closeConnection();
         }
 
         private void FillDataAdapter(DataGridView dgw)
@@ -176,7 +181,9 @@ namespace DB_Kursach
         private void buttonSave_Click(object sender, EventArgs e)
         {
             commandBuilder = new SqlCommandBuilder(dataAdapter);
-            dataAdapter.Update(dataSet);
+
+            //   dataAdapter.UpdateCommand.CommandText = sqlQuery;
+             dataAdapter.Update(dataSet);
         }
 
         private void забронированныеТоварыToolStripMenuItem_Click(object sender, EventArgs e)
