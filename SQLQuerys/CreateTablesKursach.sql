@@ -1,6 +1,5 @@
 use Kursach_DB
 
-
 DROP TABLE IF EXISTS Ski, Sleigh, SkiPoles, Skates,  RepairProduct, RepairCompany, ProductBooking, DecommissionedProduct, 
 ProductRent, Product, ProductGroup, ProductSubcategory, ProductCategory, Rent, Tenant, Gender,  Booking
 
@@ -95,7 +94,7 @@ VALUES
 (369311201, 11, 2, 'ATEMI Drift 2.0', 150, 1),
 (369311202, 11, 2, 'ATEMI Drift 2.0', 150, 1),
 (369311203, 11, 2, 'ATEMI AHSK04 Escape', 200, 1),
-(369311204, 11, 2, 'ATEMI AHSK04 Escape', 200, 0),
+(369311204, 11, 2, 'ATEMI AHSK04 Escape', 200, 0), -- аня 5
 (369311205, 11, 2, 'ATEMI Ahsk02 Speed', 175, 1),
 (369311301, 11, 3, 'ATEMI Basic', 165, 1),
 (369311302, 11, 3, 'ATEMI Basic', 165, 0),
@@ -123,7 +122,7 @@ VALUES
 (369316104, 16, 1, 'BRADOS PRO SKATE AIR', 280, 0),
 (369316201, 16, 2, 'Fischer RC One 72 MF', 400, 1),
 (369316202, 16, 2, 'Fischer RC One 72 MF', 400, 1),
-(369316203, 16, 2, 'Fischer RC One 72 MF', 400, 0),
+(369316203, 16, 2, 'Fischer RC One 72 MF', 400, 0), --Пушкин 6
 (369316204, 16, 2, 'Atomic Redster RX ERA', 420, 1),
 (369316205, 16, 2, 'Atomic Redster RX ERA', 420, 0),
 (369316206, 16, 2, 'Fischer RC4 WC RC Pro M.O-Plate', 425, 0),--Пушкин
@@ -155,7 +154,7 @@ Age INT CHECK(Age >0 AND Age < 100),
 Phone varchar(20) UNIQUE NOT NULL,
 Gender varchar(7) REFERENCES Gender (Type)
 )
-
+	
 INSERT INTO Tenant (FIO, Age, Phone, Gender)
 VALUES 
 ('Александр Сергеевич Пушкин', 37, '89026515690', 'Мужской'),
@@ -209,7 +208,9 @@ VALUES
 (1, 3225, '04.04.2023 12:00', '04.04.2023 15:00', 3500, 1),
 (2, 3675, '05.04.2023 10:00', '05.04.2023 17:00', 4000, 1),
 (3, 1680, '05.04.2023 12:45', '05.04.2023 15:45', 2000, 1),
-(6, 680, '01.05.2023 11:30', '01.05.2023 13:30', 1000, 0)
+(6, 680, '01.05.2023 11:30', '01.05.2023 13:30', 1000, 0),
+(6, 4800, '23.05.2023 10:30', '24.05.2023 10:30', 5000, 1),
+(1, 800, '22.05.2023 10:00', '22.05.2023 12:00', 1000, 1)
 
 CREATE TABLE ProductRent
 (
@@ -230,7 +231,9 @@ VALUES
 (3,369313207),
 (3,369310401),
 (4,369311503),
-(4,369313302)
+(4,369313302),
+(5,369311204),
+(6,369316203)
 
 CREATE TABLE DecommissionedProduct
 (
@@ -263,13 +266,13 @@ CREATE TABLE RepairProduct
 RepairCompanyId INT FOREIGN KEY REFERENCES RepairCompany (Id),
 ProductNumber INT FOREIGN KEY REFERENCES Product (Number),
 Cost MONEY NOT NULL,
-StartDate DATE NOT NULL,
-EndDate DATE NOT NULL, 
+DateStart DATE NOT NULL,
+DateEnd DATE NOT NULL, 
 IsOver BIT
 PRIMARY KEY(RepairCompanyId, ProductNumber)
 )
 
-INSERT INTO RepairProduct (RepairCompanyId, ProductNumber, Cost, StartDate, EndDate, IsOver)
+INSERT INTO RepairProduct (RepairCompanyId, ProductNumber, Cost, DateStart, DateEnd, IsOver)
 VALUES 
 (1, 369310101, 400, '13.04.2023', '24.04.2023', 1)
 
