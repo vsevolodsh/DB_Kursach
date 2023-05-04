@@ -9,17 +9,13 @@ namespace DB_Kursach
 {
     public class DataBase
     {
-         string login;
-         string password;
          string connectionString;
          SqlConnection sqlConnection;
 
       public  DataBase(string login, string password)
         {
-            this.login = login;
-            this.password = password;
-            connectionString = $"Data Source=MSI;Initial Catalog=Kursach_DB;User Id={login};Password={password};";
-            //connectionString = $"Data Source=vsevolodsh;Initial Catalog=Kursach_DB;User Id={login};Password={password};";
+            //connectionString = $"Data Source=MSI;Initial Catalog=Kursach_DB;User Id={login};Password={password};";
+            connectionString = $"Data Source=vsevolodsh;Initial Catalog=Kursach_DB;User Id={login};Password={password};";
             sqlConnection = new SqlConnection(connectionString);
         }
 

@@ -89,7 +89,7 @@ VALUES
 (369310403, 10, 4, 'Peltonen X-RACE', 250, 1),
 (369310501, 10, 5, 'Head World Cup SG', 275, 1),
 (369310502, 10, 5, 'Head World Cup SG', 275, 1),
-(369310503, 10, 5, 'One Way RD 16 SL', 300, 0),
+(369310503, 10, 5, 'One Way RD 16 SL', 300, 0), -- списаны
 (369310504, 10, 5, 'One Way RD 16 SL', 300, 1),
 (369311201, 11, 2, 'ATEMI Drift 2.0', 150, 1),
 (369311202, 11, 2, 'ATEMI Drift 2.0', 150, 1),
@@ -97,7 +97,7 @@ VALUES
 (369311204, 11, 2, 'ATEMI AHSK04 Escape', 200, 0), -- аня 5
 (369311205, 11, 2, 'ATEMI Ahsk02 Speed', 175, 1),
 (369311301, 11, 3, 'ATEMI Basic', 165, 1),
-(369311302, 11, 3, 'ATEMI Basic', 165, 0),
+(369311302, 11, 3, 'ATEMI Basic', 165, 0), -- списаны 
 (369311303, 11, 3, 'Atemi Afskd01f', 160, 1),
 (369311304, 11, 3, 'Atemi Afskd01f', 160, 1),
 (369311401, 11, 4, 'TechTeam Kayot', 130, 1),
@@ -122,7 +122,7 @@ VALUES
 (369316104, 16, 1, 'BRADOS PRO SKATE AIR', 280, 0),
 (369316201, 16, 2, 'Fischer RC One 72 MF', 400, 1),
 (369316202, 16, 2, 'Fischer RC One 72 MF', 400, 1),
-(369316203, 16, 2, 'Fischer RC One 72 MF', 400, 0), --Пушкин 6
+(369316203, 16, 2, 'Fischer RC One 72 MF', 400, 1), 
 (369316204, 16, 2, 'Atomic Redster RX ERA', 420, 1),
 (369316205, 16, 2, 'Atomic Redster RX ERA', 420, 0),
 (369316206, 16, 2, 'Fischer RC4 WC RC Pro M.O-Plate', 425, 0),--Пушкин
@@ -181,7 +181,7 @@ VALUES
 
 CREATE TABLE ProductBooking
 (
-BookingId INT FOREIGN KEY REFERENCES Booking (Id),
+BookingId INT FOREIGN KEY REFERENCES Booking (Id) ON DELETE CASCADE,
 ProductNumber INT FOREIGN KEY REFERENCES Product (Number),
 IsOver BIT
 PRIMARY KEY(BookingId, ProductNumber)
@@ -205,12 +205,12 @@ IsOver BIT
 
 INSERT INTO Rent(TenantId, TotalRentCost, DateStart, DateEnd, TotalDepositCost, IsOver)
 VALUES
-(1, 3225, '04.04.2023 12:00', '04.04.2023 15:00', 3500, 1),
-(2, 3675, '05.04.2023 10:00', '05.04.2023 17:00', 4000, 1),
-(3, 1680, '05.04.2023 12:45', '05.04.2023 15:45', 2000, 1),
+(1, 3225, '04.04.2023 12:00', '04.04.2023 15:00', 3500, 0),
+(2, 3675, '05.04.2023 10:00', '05.04.2023 17:00', 4000, 0),
+(3, 1680, '05.04.2023 12:45', '05.04.2023 15:45', 2000, 0),
 (6, 680, '01.05.2023 11:30', '01.05.2023 13:30', 1000, 0),
 (6, 4800, '23.05.2023 10:30', '24.05.2023 10:30', 5000, 1),
-(1, 800, '22.05.2023 10:00', '22.05.2023 12:00', 1000, 1)
+(1, 800, '22.05.2023 10:00', '22.05.2023 12:00', 1000, 0)
 
 CREATE TABLE ProductRent
 (
@@ -237,11 +237,15 @@ VALUES
 
 CREATE TABLE DecommissionedProduct
 (
-Id INT PRIMARY KEY IDENTITY,
-ProductNumber INT FOREIGN KEY REFERENCES Product (Number),
-DecommissionedDate DATETIME NOT NULL,
+ProductNumber INT FOREIGN KEY REFERENCES Product (Number) PRIMARY KEY,
+DecommissionedDate DATE NOT NULL,
 Reason nvarchar(250) NOT NULL
 )
+
+INSERT INTO DecommissionedProduct (ProductNumber, DecommissionedDate, Reason)
+VALUES 
+(369310503, '05.05.2023', 'Потерялись'),
+(369311302, '02.04.2023', 'Треснуло лезвие')
 
 CREATE TABLE RepairCompany
 (
