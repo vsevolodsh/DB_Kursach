@@ -171,19 +171,17 @@ CREATE TABLE Booking
 (
 Id INT PRIMARY KEY IDENTITY,
 TenantId INT FOREIGN KEY REFERENCES Tenant (Id),
-DateEnd DATETIME NOT NULL,
-IsOver BIT
+DateEnd DATETIME NOT NULL
 )
 
-INSERT INTO Booking (TenantId, DateEnd, IsOver)
+INSERT INTO Booking (TenantId, DateEnd)
 VALUES
-(9, '17.04.2023', 0)
+(9, '17.06.2023')
 
 CREATE TABLE ProductBooking
 (
 BookingId INT FOREIGN KEY REFERENCES Booking (Id) ON DELETE CASCADE,
-ProductNumber INT FOREIGN KEY REFERENCES Product (Number),
-IsOver BIT
+ProductNumber INT FOREIGN KEY REFERENCES Product (Number)
 PRIMARY KEY(BookingId, ProductNumber)
 )
 
@@ -214,7 +212,7 @@ VALUES
 
 CREATE TABLE ProductRent
 (
-RentId INT FOREIGN KEY REFERENCES Rent (Id),
+RentId INT FOREIGN KEY REFERENCES Rent (Id) ON DELETE CASCADE,
 ProductNumber INT FOREIGN KEY REFERENCES Product (Number),
 PRIMARY KEY(RentId, ProductNumber)
 )

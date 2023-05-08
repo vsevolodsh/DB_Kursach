@@ -41,6 +41,7 @@
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.добавитьНовогоАрендатораToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.добавитьНовыйТоварToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.добавитьНовуюАрендуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.panel1 = new System.Windows.Forms.Panel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -52,11 +53,12 @@
             this.textBoxSearch = new System.Windows.Forms.TextBox();
             this.buttonSave = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.buttonReturnProductFromRepair = new System.Windows.Forms.Button();
             this.buttonSendProductForRepair = new System.Windows.Forms.Button();
             this.buttonDecommisProduct = new System.Windows.Forms.Button();
             this.buttonCloseRent = new System.Windows.Forms.Button();
-            this.добавитьНовуюАрендуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.добавитьНовуюБроньToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
@@ -152,7 +154,8 @@
             this.toolStripMenuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.добавитьНовогоАрендатораToolStripMenuItem,
             this.добавитьНовыйТоварToolStripMenuItem,
-            this.добавитьНовуюАрендуToolStripMenuItem});
+            this.добавитьНовуюАрендуToolStripMenuItem,
+            this.добавитьНовуюБроньToolStripMenuItem});
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
             this.toolStripMenuItem2.Size = new System.Drawing.Size(71, 20);
             this.toolStripMenuItem2.Text = "Добавить";
@@ -170,6 +173,13 @@
             this.добавитьНовыйТоварToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
             this.добавитьНовыйТоварToolStripMenuItem.Text = "Добавить новый товар";
             this.добавитьНовыйТоварToolStripMenuItem.Click += new System.EventHandler(this.добавитьНовыйТоварToolStripMenuItem_Click);
+            // 
+            // добавитьНовуюАрендуToolStripMenuItem
+            // 
+            this.добавитьНовуюАрендуToolStripMenuItem.Name = "добавитьНовуюАрендуToolStripMenuItem";
+            this.добавитьНовуюАрендуToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.добавитьНовуюАрендуToolStripMenuItem.Text = "Добавить новую аренду";
+            this.добавитьНовуюАрендуToolStripMenuItem.Click += new System.EventHandler(this.добавитьНовуюАрендуToolStripMenuItem_Click);
             // 
             // dataGridView1
             // 
@@ -269,6 +279,7 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.Control;
+            this.panel2.Controls.Add(this.button1);
             this.panel2.Controls.Add(this.buttonReturnProductFromRepair);
             this.panel2.Controls.Add(this.buttonSendProductForRepair);
             this.panel2.Controls.Add(this.buttonDecommisProduct);
@@ -279,6 +290,16 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(179, 460);
             this.panel2.TabIndex = 3;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(3, 380);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(173, 34);
+            this.button1.TabIndex = 8;
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // buttonReturnProductFromRepair
             // 
@@ -324,12 +345,12 @@
             this.buttonCloseRent.Visible = false;
             this.buttonCloseRent.Click += new System.EventHandler(this.buttonCloseRent_Click);
             // 
-            // добавитьНовуюАрендуToolStripMenuItem
+            // добавитьНовуюБроньToolStripMenuItem
             // 
-            this.добавитьНовуюАрендуToolStripMenuItem.Name = "добавитьНовуюАрендуToolStripMenuItem";
-            this.добавитьНовуюАрендуToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
-            this.добавитьНовуюАрендуToolStripMenuItem.Text = "Добавить новую аренду";
-            this.добавитьНовуюАрендуToolStripMenuItem.Click += new System.EventHandler(this.добавитьНовуюАрендуToolStripMenuItem_Click);
+            this.добавитьНовуюБроньToolStripMenuItem.Name = "добавитьНовуюБроньToolStripMenuItem";
+            this.добавитьНовуюБроньToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.добавитьНовуюБроньToolStripMenuItem.Text = "Добавить новую бронь";
+            this.добавитьНовуюБроньToolStripMenuItem.Click += new System.EventHandler(this.добавитьНовуюБроньToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -388,5 +409,7 @@
         private Button buttonSendProductForRepair;
         private Button buttonReturnProductFromRepair;
         private ToolStripMenuItem добавитьНовуюАрендуToolStripMenuItem;
+        private Button button1;
+        private ToolStripMenuItem добавитьНовуюБроньToolStripMenuItem;
     }
 }

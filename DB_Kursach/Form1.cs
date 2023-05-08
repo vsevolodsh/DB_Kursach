@@ -185,11 +185,15 @@ namespace DB_Kursach
                     //    dataAdapter.UpdateCommand.Parameters.Add("@Id", SqlDbType.Int).Value = dataSet.Tables[0].Rows[row.Index][0];
                     //    break;
                     case "DecommissionedProduct":
-                        dataAdapter.UpdateCommand = new SqlCommand("UPDATE DecommissionedProduct SET @DecommissionedDate = @DecommissionedDate, Reason = @Reason " +
+                        dataAdapter.UpdateCommand = new SqlCommand("UPDATE DecommissionedProduct SET DecommissionedDate = @DecommissionedDate, Reason = @Reason " +
                             "WHERE ProductNumber = @ProductNumber", dataBase.getSqlConnection());
                         dataAdapter.UpdateCommand.Parameters.Add("@DecommissionedDate", SqlDbType.DateTime).Value = dataSet.Tables[0].Rows[row.Index][1];
                         dataAdapter.UpdateCommand.Parameters.Add("@Reason", SqlDbType.NVarChar).Value = dataSet.Tables[0].Rows[row.Index][2];
                         dataAdapter.UpdateCommand.Parameters.Add("@ProductNumber", SqlDbType.Int).Value = dataSet.Tables[0].Rows[row.Index][0];
+                        break;
+                    case "BookedProducts":
+                        dataAdapter.UpdateCommand = new SqlCommand("UPDATE Booking SET DateEnd = @DateEnd", dataBase.getSqlConnection());
+                        dataAdapter.UpdateCommand.Parameters.Add("@DateEnd", SqlDbType.DateTime).Value = dataSet.Tables[0].Rows[row.Index][3];
                         break;
                     default:
                         break;
@@ -204,6 +208,8 @@ namespace DB_Kursach
         private void информацияОВсехТоварахToolStripMenuItem_Click(object sender, EventArgs e)
         {
             HideButton();
+            button1.Visible = true;
+            button1.Text = "Показать товары только на складе";
             buttonSendProductForRepair.Visible = true;
             buttonDecommisProduct.Visible = true;
             buttonDelete.Enabled = true;
@@ -239,6 +245,8 @@ namespace DB_Kursach
         private void информацияОбАрендахToolStripMenuItem_Click(object sender, EventArgs e)
         {
             HideButton();
+            button1.Visible = true;
+            button1.Text = "Показать только активные аренды.";
             buttonCloseRent.Visible = true;
             currentTableName = "RentInfo";
             sqlSelectQueryWithParamNames = "SELECT Id, TenantName AS \"Имя арендатора\", ProductsNumbers AS \"Артикулы товаров\"," +
@@ -249,21 +257,6 @@ namespace DB_Kursach
         }
         private void данныеОбАрендаторахToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //    currentTableName = "TenantInfo";
-            //    sqlSelectQueryWithParamNames = "SELECT Id, FIO AS ФИО, Phone AS \"Номер телефона\", Age AS Возраст, Gender AS Пол, RentId AS \" Id аренд\", " +
-            //        "ActiveRent AS \"С активной арендой\" FROM TenantInfo ";
-            //    DialogResult result = MessageBox.Show(
-            //"Вывести арендаторов только с активной арендой?",
-            //"Сообщение",
-            //MessageBoxButtons.YesNo,
-            //MessageBoxIcon.Information,
-            //MessageBoxDefaultButton.Button1);
-            //    if (result == DialogResult.Yes)
-            //    {
-            //        sqlSelectQueryWithParamNames += "WHERE ActiveRent = 1";
-            //    }
-            //    dataAdapter = new SqlDataAdapter(sqlSelectQueryWithParamNames, dataBase.getSqlConnection());
-            //    FillDataAdapter(dataGridView1);
             currentTableName = "Tenant";
             sqlSelectQueryWithParamNames = "SELECT Id, FIO AS ФИО, Phone AS \"Номер телефона\", Age AS Возраст, Gender AS Пол FROM Tenant";
             dataAdapter = new SqlDataAdapter(sqlSelectQueryWithParamNames, dataBase.getSqlConnection());
@@ -272,8 +265,13 @@ namespace DB_Kursach
         }
         private void забронированныеТоварыToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            HideButton();
             buttonDelete.Enabled = true;
             currentTableName = "BookedProducts";
+            dataBase.openConnection();
+            SqlCommand cmd = new SqlCommand("DELETE FROM Booking WHERE DateEnd < GETDATE()", dataBase.getSqlConnection());
+            cmd.ExecuteScalar();
+            dataBase.closeConnection();
             sqlSelectQueryWithParamNames = "SELECT Id, FIO AS ФИО, ProductsNumbers AS \"Артикулы товаров\", DateEnd AS \"Дата конца\" FROM BookedProducts";
             sqlDeleteQuery = "DELETE FROM Booking WHERE Id = @Id";
             dataAdapter = new SqlDataAdapter(sqlSelectQueryWithParamNames, dataBase.getSqlConnection());
@@ -283,22 +281,14 @@ namespace DB_Kursach
         private void товарыВРемонтеToolStripMenuItem_Click(object sender, EventArgs e)
         {
             HideButton();
+            button1.Visible = true;
+            button1.Text = "Показать только проходящие ремонт товары.";
             buttonReturnProductFromRepair.Visible = true;
             buttonDelete.Enabled = false;
             currentTableName = "ProductsUnderRepair";
             sqlSelectQueryWithParamNames = "SELECT Number AS Артикул, ProductGroup AS \"Группа товара\", Name AS \"Навание товара\"," +
                 "RepairCompanyName AS \"Навание ремонтной компании\", Cost AS \"Стоимость ремонта\", DateStart AS \"Дата начала\", DateEnd AS \"Дата конца\", " +
                 "isOver AS Завершена FROM ProductsUnderRepair ";
-            DialogResult result = MessageBox.Show(
-      "Вывести только товары проходящие ремонт в данынй момент?",
-      "Сообщение",
-      MessageBoxButtons.YesNo,
-      MessageBoxIcon.Information,
-      MessageBoxDefaultButton.Button1);
-            if (result == DialogResult.Yes)
-            {
-                sqlSelectQueryWithParamNames += "WHERE isOver = 0";
-            }
             dataAdapter = new SqlDataAdapter(sqlSelectQueryWithParamNames, dataBase.getSqlConnection());
             FillDataAdapter(dataGridView1);
         }
@@ -317,6 +307,7 @@ namespace DB_Kursach
 
         private void HideButton()
         {
+            button1.Visible = false;
             buttonCloseRent.Visible = false;
             buttonDecommisProduct.Visible = false;
             buttonSendProductForRepair.Visible = false;
@@ -521,6 +512,50 @@ namespace DB_Kursach
                 command.Parameters.Add(DateEndParam);
                 command.Parameters.Add(RentIdParam);
                 foreach (var productNumber in nrForm.ProductsNumber)
+                {
+                    SqlParameter productNumberParam = new("@ProductNumber", productNumber);
+                    command.Parameters.Add(productNumberParam);
+                    command.CommandType = CommandType.StoredProcedure;
+                    var queryResult = command.ExecuteNonQuery();
+                    command.Parameters.Remove(productNumberParam);
+                }
+
+                dataBase.closeConnection();
+            }
+            if (result == DialogResult.Cancel)
+                return;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (currentTableName.Equals("PrPrGroups"))
+            {
+                sqlSelectQueryWithParamNames += " WHERE IsProductInWarehouse = 1";
+            }
+            else if (currentTableName.Equals("RentInfo") || currentTableName.Equals("ProductsUnderRepair"))
+            {
+                sqlSelectQueryWithParamNames += " WHERE IsOver = 1";
+            }
+            dataAdapter = new SqlDataAdapter(sqlSelectQueryWithParamNames, dataBase.getSqlConnection());
+            FillDataAdapter(dataGridView1);
+        }
+
+        private void добавитьНовуюБроньToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            NewBooking nbForm = new(dataBase);
+            DialogResult result = nbForm.ShowDialog(this);
+            string sqlExpression = "sp_InsertBooking";
+            SqlCommand command = new(sqlExpression, dataBase.getSqlConnection());
+            if (result == DialogResult.OK)
+            {
+                dataBase.openConnection();
+                SqlParameter TenantIdParam = new("@TenantId", nbForm.TenantId);
+                SqlParameter DateEndParam = new("@DateEnd", nbForm.DateEnd);
+                SqlParameter BookingIdParam = new("@BookingId", nbForm.BookingId);
+                command.Parameters.Add(TenantIdParam);
+                command.Parameters.Add(DateEndParam);
+                command.Parameters.Add(BookingIdParam);
+                foreach (var productNumber in nbForm.ProductsNumber)
                 {
                     SqlParameter productNumberParam = new("@ProductNumber", productNumber);
                     command.Parameters.Add(productNumberParam);
