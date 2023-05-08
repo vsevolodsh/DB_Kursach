@@ -6,7 +6,6 @@ CREATE PROCEDURE sp_InsertRent
 	@DateStart Datetime,
 	@DateEnd Datetime,
 	@TotalDeposit MONEY,
-	@IsOver BIT,
 	@ProductNumber INT,
 	@RentId INT
 AS

@@ -175,15 +175,15 @@ namespace DB_Kursach
                         dataAdapter.UpdateCommand.Parameters.Add("@Size", SqlDbType.TinyInt).Value = dataSet.Tables[0].Rows[row.Index][5];
                         dataAdapter.UpdateCommand.Parameters.Add("@ProductNumber", SqlDbType.Int).Value = dataSet.Tables[0].Rows[row.Index][0];
                         break;
-                    case "TenantInfo":
-                        dataAdapter.UpdateCommand = new SqlCommand("UPDATE Tenant SET FIO = @FIO, Age = @Age, Phone = @Phone, Gender = @Gender WHERE Id = @Id"
-                            , dataBase.getSqlConnection());
-                        dataAdapter.UpdateCommand.Parameters.Add("@FIO", SqlDbType.NVarChar).Value = dataSet.Tables[0].Rows[row.Index][1];
-                        dataAdapter.UpdateCommand.Parameters.Add("@Age", SqlDbType.Int).Value = dataSet.Tables[0].Rows[row.Index][2];
-                        dataAdapter.UpdateCommand.Parameters.Add("@Phone", SqlDbType.VarChar).Value = dataSet.Tables[0].Rows[row.Index][3];
-                        dataAdapter.UpdateCommand.Parameters.Add("@Gender", SqlDbType.NVarChar).Value = dataSet.Tables[0].Rows[row.Index][4];
-                        dataAdapter.UpdateCommand.Parameters.Add("@Id", SqlDbType.Int).Value = dataSet.Tables[0].Rows[row.Index][0];
-                        break;
+                    //case "TenantInfo":
+                    //    dataAdapter.UpdateCommand = new SqlCommand("UPDATE Tenant SET FIO = @FIO, Age = @Age, Phone = @Phone, Gender = @Gender WHERE Id = @Id"
+                    //        , dataBase.getSqlConnection());
+                    //    dataAdapter.UpdateCommand.Parameters.Add("@FIO", SqlDbType.NVarChar).Value = dataSet.Tables[0].Rows[row.Index][1];
+                    //    dataAdapter.UpdateCommand.Parameters.Add("@Age", SqlDbType.Int).Value = dataSet.Tables[0].Rows[row.Index][2];
+                    //    dataAdapter.UpdateCommand.Parameters.Add("@Phone", SqlDbType.VarChar).Value = dataSet.Tables[0].Rows[row.Index][3];
+                    //    dataAdapter.UpdateCommand.Parameters.Add("@Gender", SqlDbType.NVarChar).Value = dataSet.Tables[0].Rows[row.Index][4];
+                    //    dataAdapter.UpdateCommand.Parameters.Add("@Id", SqlDbType.Int).Value = dataSet.Tables[0].Rows[row.Index][0];
+                    //    break;
                     case "DecommissionedProduct":
                         dataAdapter.UpdateCommand = new SqlCommand("UPDATE DecommissionedProduct SET @DecommissionedDate = @DecommissionedDate, Reason = @Reason " +
                             "WHERE ProductNumber = @ProductNumber", dataBase.getSqlConnection());
@@ -203,6 +203,9 @@ namespace DB_Kursach
 
         private void информацияОВсехТоварахToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            HideButton();
+            buttonSendProductForRepair.Visible = true;
+            buttonDecommisProduct.Visible = true;
             buttonDelete.Enabled = true;
             currentTableName = "PrPrGroups";
             sqlSelectQueryWithParamNames = "SELECT Number AS Артикул, Name AS Навание, ProductGroup AS \"Группа товара\", RentCostInHour AS \"Стоимость за час\"," +
@@ -235,29 +238,36 @@ namespace DB_Kursach
 
         private void информацияОбАрендахToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            HideButton();
             buttonCloseRent.Visible = true;
             currentTableName = "RentInfo";
             sqlSelectQueryWithParamNames = "SELECT Id, TenantName AS \"Имя арендатора\", ProductsNumbers AS \"Артикулы товаров\"," +
                 " DateStart AS \"Дата начала\", DateEnd AS \"Дата конца\", RentCost AS \"Цена аренды\", Deposit AS Залог, isOver AS Завершена FROM RentInfo";
             dataAdapter = new SqlDataAdapter(sqlSelectQueryWithParamNames, dataBase.getSqlConnection());
+            sqlDeleteQuery = "DELETE FROM Rent WHERE Id = @Id";
             FillDataAdapter(dataGridView1);
         }
         private void данныеОбАрендаторахToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            currentTableName = "TenantInfo";
-            sqlSelectQueryWithParamNames = "SELECT Id, FIO AS ФИО, Phone AS \"Номер телефона\", Age AS Возраст, Gender AS Пол, RentId AS \" Id аренд\", " +
-                "ActiveRent AS \"С активной арендой\" FROM TenantInfo ";
-            DialogResult result = MessageBox.Show(
-        "Вывести арендаторов только с активной арендой?",
-        "Сообщение",
-        MessageBoxButtons.YesNo,
-        MessageBoxIcon.Information,
-        MessageBoxDefaultButton.Button1);
-            if (result == DialogResult.Yes)
-            {
-                sqlSelectQueryWithParamNames += "WHERE ActiveRent = 1";
-            }
+            //    currentTableName = "TenantInfo";
+            //    sqlSelectQueryWithParamNames = "SELECT Id, FIO AS ФИО, Phone AS \"Номер телефона\", Age AS Возраст, Gender AS Пол, RentId AS \" Id аренд\", " +
+            //        "ActiveRent AS \"С активной арендой\" FROM TenantInfo ";
+            //    DialogResult result = MessageBox.Show(
+            //"Вывести арендаторов только с активной арендой?",
+            //"Сообщение",
+            //MessageBoxButtons.YesNo,
+            //MessageBoxIcon.Information,
+            //MessageBoxDefaultButton.Button1);
+            //    if (result == DialogResult.Yes)
+            //    {
+            //        sqlSelectQueryWithParamNames += "WHERE ActiveRent = 1";
+            //    }
+            //    dataAdapter = new SqlDataAdapter(sqlSelectQueryWithParamNames, dataBase.getSqlConnection());
+            //    FillDataAdapter(dataGridView1);
+            currentTableName = "Tenant";
+            sqlSelectQueryWithParamNames = "SELECT Id, FIO AS ФИО, Phone AS \"Номер телефона\", Age AS Возраст, Gender AS Пол FROM Tenant";
             dataAdapter = new SqlDataAdapter(sqlSelectQueryWithParamNames, dataBase.getSqlConnection());
+            sqlDeleteQuery = "DELETE FROM Tenant WHERE Id = @Id";
             FillDataAdapter(dataGridView1);
         }
         private void забронированныеТоварыToolStripMenuItem_Click(object sender, EventArgs e)
@@ -272,6 +282,8 @@ namespace DB_Kursach
 
         private void товарыВРемонтеToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            HideButton();
+            buttonReturnProductFromRepair.Visible = true;
             buttonDelete.Enabled = false;
             currentTableName = "ProductsUnderRepair";
             sqlSelectQueryWithParamNames = "SELECT Number AS Артикул, ProductGroup AS \"Группа товара\", Name AS \"Навание товара\"," +
@@ -293,12 +305,22 @@ namespace DB_Kursach
 
         private void списанныеТоварыToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            HideButton();
+
             buttonDelete.Enabled = true;
             currentTableName = "DecommissionedProduct";
             sqlSelectQueryWithParamNames = "SELECT ProductNumber AS Артикул, DecommissionedDate AS \"Дата списания\", Reason AS Причина FROM DecommissionedProduct";
             dataAdapter = new SqlDataAdapter(sqlSelectQueryWithParamNames, dataBase.getSqlConnection());
             sqlDeleteQuery = "DELETE FROM DecommissionedProduct WHERE ProductNumber = @Number";
             FillDataAdapter(dataGridView1);
+        }
+
+        private void HideButton()
+        {
+            buttonCloseRent.Visible = false;
+            buttonDecommisProduct.Visible = false;
+            buttonSendProductForRepair.Visible = false;
+            buttonReturnProductFromRepair.Visible = false;
         }
 
         private void добавитьНовыйТоварToolStripMenuItem_Click(object sender, EventArgs e)
@@ -407,5 +429,111 @@ namespace DB_Kursach
             MessageBox.Show("Аренда успешна завершена, товары возвращены на склад!");
             dataBase.closeConnection();
         }
+
+        private void buttonDecommisProduct_Click(object sender, EventArgs e)
+        {
+            DecommisProduct dcpForm = new();
+            DialogResult result = dcpForm.ShowDialog(this);
+            string sqlExpression = "sp_DecommisProduct";
+            SqlCommand command = new(sqlExpression, dataBase.getSqlConnection());
+            if (result == DialogResult.OK)
+            {
+                dataBase.openConnection();
+                SqlParameter numberParam = new("@ProductNumber", dataSet.Tables[0].Rows[dataGridView1.SelectedRows[0].Index][0].ToString());
+                SqlParameter DecommissionedDateParam = new("@DecommissionedDate", dcpForm.DecommissionedDate);
+                SqlParameter ReasonParam = new("@Reason", dcpForm.Reason);
+                command.Parameters.Add(numberParam);
+                command.Parameters.Add(DecommissionedDateParam);
+                command.Parameters.Add(ReasonParam);
+                command.CommandType = CommandType.StoredProcedure;
+                var queryResult = command.ExecuteNonQuery();
+                dataBase.closeConnection();
+            }
+            if (result == DialogResult.Cancel)
+                return;
+
+        }
+
+        private void buttonSendProductForRepair_Click(object sender, EventArgs e)
+        {
+            SendProductForRepair spfrForm = new();
+            DialogResult result = spfrForm.ShowDialog(this);
+            string sqlExpression = "sp_SendProductForRepair";
+            SqlCommand command = new(sqlExpression, dataBase.getSqlConnection());
+            if (result == DialogResult.OK)
+            {
+                dataBase.openConnection();
+                SqlParameter numberParam = new("@ProductNumber", dataSet.Tables[0].Rows[dataGridView1.SelectedRows[0].Index][0].ToString());
+                SqlParameter RepairCompanyIdParam = new("@RepairCompanyId", spfrForm.RepairCompanyId);
+                SqlParameter CostParam = new("@Cost", spfrForm.Cost);
+                SqlParameter DateStartParam = new("@DateStart", spfrForm.DateStart);
+                SqlParameter DateEndParam = new("@DateEnd", spfrForm.DateEnd);
+                command.Parameters.Add(numberParam);
+                command.Parameters.Add(RepairCompanyIdParam);
+                command.Parameters.Add(CostParam);
+                command.Parameters.Add(DateStartParam);
+                command.Parameters.Add(DateEndParam);
+                command.CommandType = CommandType.StoredProcedure;
+                var queryResult = command.ExecuteNonQuery();
+                dataBase.closeConnection();
+            }
+            if (result == DialogResult.Cancel)
+                return;
+        }
+
+        private void buttonReturnProductFromRepair_Click(object sender, EventArgs e)
+        {
+            string sqlExpression = "sp_ReturnProductFromRepair";
+            SqlCommand command = new(sqlExpression, dataBase.getSqlConnection());
+            dataBase.openConnection();
+            foreach (DataGridViewRow row in dataGridView1.SelectedRows)
+            {
+                SqlParameter numberParam = new("@ProductNumber", dataSet.Tables[0].Rows[row.Index][0]);
+                command.Parameters.Add(numberParam);
+                command.CommandType = CommandType.StoredProcedure;
+                var queryResult = command.ExecuteNonQuery();
+
+            }
+
+            dataBase.closeConnection();
+
+        }
+
+        private void добавитьНовуюАрендуToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            NewRent nrForm = new(dataBase);
+            DialogResult result = nrForm.ShowDialog(this);
+            string sqlExpression = "sp_InsertRent";
+            SqlCommand command = new(sqlExpression, dataBase.getSqlConnection());
+            if (result == DialogResult.OK && !nrForm.stop)
+            {
+                dataBase.openConnection();
+                SqlParameter TenantIdParam = new("@TenantId", nrForm.TenantId);
+                SqlParameter TotalRentCostParam = new("@TotalRentCost", nrForm.TotalRentCost);
+                SqlParameter TotalDepositParam = new("@TotalDeposit", nrForm.TotalDeposit);
+                SqlParameter DateStartParam = new("@DateStart", nrForm.DateStart);
+                SqlParameter DateEndParam = new("@DateEnd", nrForm.DateEnd);
+                SqlParameter RentIdParam = new("@RentId", nrForm.RentId);
+                command.Parameters.Add(TenantIdParam);
+                command.Parameters.Add(TotalRentCostParam);
+                command.Parameters.Add(TotalDepositParam);
+                command.Parameters.Add(DateStartParam);
+                command.Parameters.Add(DateEndParam);
+                command.Parameters.Add(RentIdParam);
+                foreach (var productNumber in nrForm.ProductsNumber)
+                {
+                    SqlParameter productNumberParam = new("@ProductNumber", productNumber);
+                    command.Parameters.Add(productNumberParam);
+                    command.CommandType = CommandType.StoredProcedure;
+                    var queryResult = command.ExecuteNonQuery();
+                    command.Parameters.Remove(productNumberParam);
+                }
+
+                dataBase.closeConnection();
+            }
+            if (result == DialogResult.Cancel)
+                return;
+        }
     }
 }
+

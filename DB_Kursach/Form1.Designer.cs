@@ -52,7 +52,11 @@
             this.textBoxSearch = new System.Windows.Forms.TextBox();
             this.buttonSave = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.buttonReturnProductFromRepair = new System.Windows.Forms.Button();
+            this.buttonSendProductForRepair = new System.Windows.Forms.Button();
+            this.buttonDecommisProduct = new System.Windows.Forms.Button();
             this.buttonCloseRent = new System.Windows.Forms.Button();
+            this.добавитьНовуюАрендуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
@@ -147,7 +151,8 @@
             // 
             this.toolStripMenuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.добавитьНовогоАрендатораToolStripMenuItem,
-            this.добавитьНовыйТоварToolStripMenuItem});
+            this.добавитьНовыйТоварToolStripMenuItem,
+            this.добавитьНовуюАрендуToolStripMenuItem});
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
             this.toolStripMenuItem2.Size = new System.Drawing.Size(71, 20);
             this.toolStripMenuItem2.Text = "Добавить";
@@ -264,6 +269,9 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.Control;
+            this.panel2.Controls.Add(this.buttonReturnProductFromRepair);
+            this.panel2.Controls.Add(this.buttonSendProductForRepair);
+            this.panel2.Controls.Add(this.buttonDecommisProduct);
             this.panel2.Controls.Add(this.buttonCloseRent);
             this.panel2.Controls.Add(this.buttonSave);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
@@ -271,6 +279,39 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(179, 460);
             this.panel2.TabIndex = 3;
+            // 
+            // buttonReturnProductFromRepair
+            // 
+            this.buttonReturnProductFromRepair.Location = new System.Drawing.Point(15, 42);
+            this.buttonReturnProductFromRepair.Name = "buttonReturnProductFromRepair";
+            this.buttonReturnProductFromRepair.Size = new System.Drawing.Size(152, 41);
+            this.buttonReturnProductFromRepair.TabIndex = 7;
+            this.buttonReturnProductFromRepair.Text = "Вернуть товар из ремонта";
+            this.buttonReturnProductFromRepair.UseVisualStyleBackColor = true;
+            this.buttonReturnProductFromRepair.Visible = false;
+            this.buttonReturnProductFromRepair.Click += new System.EventHandler(this.buttonReturnProductFromRepair_Click);
+            // 
+            // buttonSendProductForRepair
+            // 
+            this.buttonSendProductForRepair.Location = new System.Drawing.Point(15, 42);
+            this.buttonSendProductForRepair.Name = "buttonSendProductForRepair";
+            this.buttonSendProductForRepair.Size = new System.Drawing.Size(152, 40);
+            this.buttonSendProductForRepair.TabIndex = 6;
+            this.buttonSendProductForRepair.Text = "Отправить товар на ремонт";
+            this.buttonSendProductForRepair.UseVisualStyleBackColor = true;
+            this.buttonSendProductForRepair.Visible = false;
+            this.buttonSendProductForRepair.Click += new System.EventHandler(this.buttonSendProductForRepair_Click);
+            // 
+            // buttonDecommisProduct
+            // 
+            this.buttonDecommisProduct.Location = new System.Drawing.Point(15, 13);
+            this.buttonDecommisProduct.Name = "buttonDecommisProduct";
+            this.buttonDecommisProduct.Size = new System.Drawing.Size(152, 23);
+            this.buttonDecommisProduct.TabIndex = 5;
+            this.buttonDecommisProduct.Text = "Списать товар";
+            this.buttonDecommisProduct.UseVisualStyleBackColor = true;
+            this.buttonDecommisProduct.Visible = false;
+            this.buttonDecommisProduct.Click += new System.EventHandler(this.buttonDecommisProduct_Click);
             // 
             // buttonCloseRent
             // 
@@ -282,6 +323,13 @@
             this.buttonCloseRent.UseVisualStyleBackColor = true;
             this.buttonCloseRent.Visible = false;
             this.buttonCloseRent.Click += new System.EventHandler(this.buttonCloseRent_Click);
+            // 
+            // добавитьНовуюАрендуToolStripMenuItem
+            // 
+            this.добавитьНовуюАрендуToolStripMenuItem.Name = "добавитьНовуюАрендуToolStripMenuItem";
+            this.добавитьНовуюАрендуToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.добавитьНовуюАрендуToolStripMenuItem.Text = "Добавить новую аренду";
+            this.добавитьНовуюАрендуToolStripMenuItem.Click += new System.EventHandler(this.добавитьНовуюАрендуToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -336,5 +384,9 @@
         private ToolStripStatusLabel toolStripStatusLabel1;
         private ToolStripStatusLabel toolStripStatusLabel2;
         private Button buttonCloseRent;
+        private Button buttonDecommisProduct;
+        private Button buttonSendProductForRepair;
+        private Button buttonReturnProductFromRepair;
+        private ToolStripMenuItem добавитьНовуюАрендуToolStripMenuItem;
     }
 }
