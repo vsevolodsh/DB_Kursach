@@ -175,15 +175,6 @@ namespace DB_Kursach
                         dataAdapter.UpdateCommand.Parameters.Add("@Size", SqlDbType.TinyInt).Value = dataSet.Tables[0].Rows[row.Index][5];
                         dataAdapter.UpdateCommand.Parameters.Add("@ProductNumber", SqlDbType.Int).Value = dataSet.Tables[0].Rows[row.Index][0];
                         break;
-                    //case "TenantInfo":
-                    //    dataAdapter.UpdateCommand = new SqlCommand("UPDATE Tenant SET FIO = @FIO, Age = @Age, Phone = @Phone, Gender = @Gender WHERE Id = @Id"
-                    //        , dataBase.getSqlConnection());
-                    //    dataAdapter.UpdateCommand.Parameters.Add("@FIO", SqlDbType.NVarChar).Value = dataSet.Tables[0].Rows[row.Index][1];
-                    //    dataAdapter.UpdateCommand.Parameters.Add("@Age", SqlDbType.Int).Value = dataSet.Tables[0].Rows[row.Index][2];
-                    //    dataAdapter.UpdateCommand.Parameters.Add("@Phone", SqlDbType.VarChar).Value = dataSet.Tables[0].Rows[row.Index][3];
-                    //    dataAdapter.UpdateCommand.Parameters.Add("@Gender", SqlDbType.NVarChar).Value = dataSet.Tables[0].Rows[row.Index][4];
-                    //    dataAdapter.UpdateCommand.Parameters.Add("@Id", SqlDbType.Int).Value = dataSet.Tables[0].Rows[row.Index][0];
-                    //    break;
                     case "DecommissionedProduct":
                         dataAdapter.UpdateCommand = new SqlCommand("UPDATE DecommissionedProduct SET DecommissionedDate = @DecommissionedDate, Reason = @Reason " +
                             "WHERE ProductNumber = @ProductNumber", dataBase.getSqlConnection());
@@ -257,6 +248,8 @@ namespace DB_Kursach
         }
         private void данныеОбАрендаторахToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            HideButton();
+            buttonDelete.Enabled = true;
             currentTableName = "Tenant";
             sqlSelectQueryWithParamNames = "SELECT Id, FIO AS ФИО, Phone AS \"Номер телефона\", Age AS Возраст, Gender AS Пол FROM Tenant";
             dataAdapter = new SqlDataAdapter(sqlSelectQueryWithParamNames, dataBase.getSqlConnection());

@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.textBoxFIO = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.comboBoxGender = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.numericUpDownAge = new System.Windows.Forms.NumericUpDown();
+            this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.textBoxTelNumber = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.numericUpDownAge = new System.Windows.Forms.NumericUpDown();
-            this.label4 = new System.Windows.Forms.Label();
-            this.comboBoxGender = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBoxFIO = new System.Windows.Forms.TextBox();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonOk = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
@@ -60,46 +60,25 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Добавить нового арендатора";
             // 
-            // textBoxFIO
+            // comboBoxGender
             // 
-            this.textBoxFIO.Location = new System.Drawing.Point(227, 39);
-            this.textBoxFIO.Name = "textBoxFIO";
-            this.textBoxFIO.Size = new System.Drawing.Size(200, 23);
-            this.textBoxFIO.TabIndex = 0;
+            this.comboBoxGender.FormattingEnabled = true;
+            this.comboBoxGender.Items.AddRange(new object[] {
+            "Мужской",
+            "Женский"});
+            this.comboBoxGender.Location = new System.Drawing.Point(227, 126);
+            this.comboBoxGender.Name = "comboBoxGender";
+            this.comboBoxGender.Size = new System.Drawing.Size(200, 23);
+            this.comboBoxGender.TabIndex = 8;
             // 
-            // label1
+            // label4
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 42);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(146, 15);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Введите ФИО арендатора";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 100);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(211, 15);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Введите номер телефона арендатора";
-            // 
-            // textBoxTelNumber
-            // 
-            this.textBoxTelNumber.Location = new System.Drawing.Point(227, 97);
-            this.textBoxTelNumber.Name = "textBoxTelNumber";
-            this.textBoxTelNumber.Size = new System.Drawing.Size(200, 23);
-            this.textBoxTelNumber.TabIndex = 2;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 70);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(161, 15);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "Введите возраст арендатора";
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 126);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(151, 15);
+            this.label4.TabIndex = 7;
+            this.label4.Text = "Выберите пол арендатора";
             // 
             // numericUpDownAge
             // 
@@ -123,25 +102,46 @@
             0,
             0});
             // 
-            // label4
+            // label3
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 126);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(151, 15);
-            this.label4.TabIndex = 7;
-            this.label4.Text = "Выберите пол арендатора";
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 70);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(161, 15);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Введите возраст арендатора";
             // 
-            // comboBoxGender
+            // label2
             // 
-            this.comboBoxGender.FormattingEnabled = true;
-            this.comboBoxGender.Items.AddRange(new object[] {
-            "Мужской",
-            "Женский"});
-            this.comboBoxGender.Location = new System.Drawing.Point(227, 126);
-            this.comboBoxGender.Name = "comboBoxGender";
-            this.comboBoxGender.Size = new System.Drawing.Size(200, 23);
-            this.comboBoxGender.TabIndex = 8;
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 100);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(211, 15);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Введите номер телефона арендатора";
+            // 
+            // textBoxTelNumber
+            // 
+            this.textBoxTelNumber.Location = new System.Drawing.Point(227, 97);
+            this.textBoxTelNumber.Name = "textBoxTelNumber";
+            this.textBoxTelNumber.Size = new System.Drawing.Size(200, 23);
+            this.textBoxTelNumber.TabIndex = 2;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 42);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(146, 15);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Введите ФИО арендатора";
+            // 
+            // textBoxFIO
+            // 
+            this.textBoxFIO.Location = new System.Drawing.Point(227, 39);
+            this.textBoxFIO.Name = "textBoxFIO";
+            this.textBoxFIO.Size = new System.Drawing.Size(200, 23);
+            this.textBoxFIO.TabIndex = 0;
             // 
             // buttonCancel
             // 
@@ -173,7 +173,7 @@
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.groupBox1);
             this.Name = "NewTenantForm";
-            this.Text = "NewTenantForm";
+            this.Text = "Новый арендатор";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAge)).EndInit();
